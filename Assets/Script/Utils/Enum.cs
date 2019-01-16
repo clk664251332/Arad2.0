@@ -87,13 +87,11 @@ public enum ESkillType
 
 public enum EPartType
 {
+    //0
     Body,
+    //1
     Hair_a,
     Hair_b,
-    Cap_a,
-    Cap_b,
-    Face_b,
-    Face_c,
     Neck_c,
     Neck_d,
     Neck_x,
@@ -101,6 +99,11 @@ public enum EPartType
     Coat_b,
     Coat_c,
     Coat_d,
+    //2
+    Cap_a,
+    Cap_b,
+    Face_b,
+    Face_c,
     Belt_a,
     Belt_b,
     Belt_c,

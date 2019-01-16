@@ -10,7 +10,9 @@ public class AnimationAbility : BaseAbility
     public Transform m_animationTrans;
 
     private List<tk2dSprite> m_lstPartSprite = new List<tk2dSprite>();
+    private Dictionary<EPartType, tk2dSprite> m_dicTypeWithSprite = new Dictionary<EPartType, tk2dSprite>();
 
+    private uint fashionId = 1001;
     public tk2dSpriteAnimator GetTk2dSpriteAnimator()
     {
         return m_tk2dSpriteAnimator;
@@ -38,7 +40,7 @@ public class AnimationAbility : BaseAbility
         m_tk2dSpriteAnimator = go.GetComponent<tk2dSpriteAnimator>();
 
         var fashionData = ConfigManager.Instance.GetData<FashionLoader, FashionLoader.Data>(m_owner.FashionConfigId);
-        InitPart(fashionData, go.transform);
+        InitPart(fashionData);
     }
 
     public override void GetComponent()
@@ -51,13 +53,29 @@ public class AnimationAbility : BaseAbility
         base.Update();
         SetSpriteFlip();
         UpdatePartSprite();
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            //ChangePart(0, EPartType.Coat_a);
+            //ChangePart(0, EPartType.Coat_b);
+            //ChangePart(0, EPartType.Coat_c);
+            //ChangePart(0, EPartType.Coat_d);
+            if (fashionId == 1001)
+            {
+                ChangeFashion(1002);
+                fashionId = 1002;
+            }else if(fashionId == 1002)
+            {
+                ChangeFashion(1001);
+                fashionId = 1001;
+            }
+        }
     }
 
     private void SetSpriteFlip()
     {
         if (m_owner.Direction == 1)
         {
-            for(int i=0;i< m_lstPartSprite.Count; i++)
+            for (int i = 0; i < m_lstPartSprite.Count; i++)
             {
                 m_lstPartSprite[i].FlipX = false;
             }
@@ -74,485 +92,262 @@ public class AnimationAbility : BaseAbility
     /// 排序skin-0/coat-1/chest-2//hair-5/cap-6/pant-7/shoes-8/belt-9/weaponPart1-3/weaponPart2-4
     /// </summary>
     /// <param name="fashionData"></param>
-    /// <param name="rootTrans"></param>
-    private void InitPart(FashionLoader.Data fashionData, Transform rootTrans)
+    private void InitPart(FashionLoader.Data fashionData)
     {
         if (fashionData.Body != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Body);
-
-            GameObject skinObj = new GameObject("Body");
-            skinObj.transform.parent = rootTrans;
-
-            var skinSprite = Common.GetOrAddComponent<tk2dSprite>(skinObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            skinSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //skinSprite.SortingOrder = 0;
-            skinSprite.SortingLevel = 0;
-
-            m_lstPartSprite.Add(skinSprite);
+            CreatPart(fashionData.Body, EPartType.Body, 0);
         }
 
         if (fashionData.Coat_a != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Coat_a);
-
-            GameObject coat_aObj = new GameObject("Coat_a");
-            coat_aObj.transform.parent = rootTrans;
-
-            var coat_aSprite = Common.GetOrAddComponent<tk2dSprite>(coat_aObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            coat_aSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //coat_1Sprite.SortingOrder = 1;
-            coat_aSprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(coat_aSprite);
+            CreatPart(fashionData.Coat_a, EPartType.Coat_a, 1);
         }
 
         if (fashionData.Coat_b != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Coat_b);
-
-            GameObject coat_2Obj = new GameObject("Coat_b");
-            coat_2Obj.transform.parent = rootTrans;
-
-            var coat_2Sprite = Common.GetOrAddComponent<tk2dSprite>(coat_2Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            coat_2Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //coat_2Sprite.SortingOrder = 1;
-            coat_2Sprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(coat_2Sprite);
+            CreatPart(fashionData.Coat_b, EPartType.Coat_b, 1);
         }
 
         if (fashionData.Coat_c != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Coat_c);
-
-            GameObject coat_2Obj = new GameObject("Coat_c");
-            coat_2Obj.transform.parent = rootTrans;
-
-            var coat_2Sprite = Common.GetOrAddComponent<tk2dSprite>(coat_2Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            coat_2Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //coat_2Sprite.SortingOrder = 1;
-            coat_2Sprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(coat_2Sprite);
+            CreatPart(fashionData.Coat_c, EPartType.Coat_c, 1);
         }
-        if (fashionData.Coat_b != 0)
+
+        if (fashionData.Coat_d != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Coat_b);
-
-            GameObject coat_2Obj = new GameObject("Coat_b");
-            coat_2Obj.transform.parent = rootTrans;
-
-            var coat_2Sprite = Common.GetOrAddComponent<tk2dSprite>(coat_2Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            coat_2Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //coat_2Sprite.SortingOrder = 1;
-            coat_2Sprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(coat_2Sprite);
+            CreatPart(fashionData.Coat_d, EPartType.Coat_d, 1);
         }
+
         if (fashionData.Neck_c != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Neck_c);
-
-            GameObject chestObj = new GameObject("Neck_c");
-            chestObj.transform.parent = rootTrans;
-
-            var chestSprite = Common.GetOrAddComponent<tk2dSprite>(chestObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            chestSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //chestSprite.SortingOrder = 2;
-            chestSprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(chestSprite);
+            CreatPart(fashionData.Neck_c, EPartType.Neck_c, 1);
         }
+
         if (fashionData.Neck_d != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Neck_d);
-
-            GameObject chestObj = new GameObject("Neck_d");
-            chestObj.transform.parent = rootTrans;
-
-            var chestSprite = Common.GetOrAddComponent<tk2dSprite>(chestObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            chestSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //chestSprite.SortingOrder = 2;
-            chestSprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(chestSprite);
+            CreatPart(fashionData.Neck_d, EPartType.Neck_d, 1);
         }
+
         if (fashionData.Neck_x != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Neck_x);
-
-            GameObject chestObj = new GameObject("Neck_x");
-            chestObj.transform.parent = rootTrans;
-
-            var chestSprite = Common.GetOrAddComponent<tk2dSprite>(chestObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            chestSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //chestSprite.SortingOrder = 2;
-            chestSprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(chestSprite);
+            CreatPart(fashionData.Neck_x, EPartType.Neck_x, 1);
         }
+
         if (fashionData.Hair_a != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Hair_a);
-
-            GameObject hairObj = new GameObject("Hair_a");
-            hairObj.transform.parent = rootTrans;
-
-            var hairSprite = Common.GetOrAddComponent<tk2dSprite>(hairObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            hairSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //hairSprite.SortingOrder = 3;
-            hairSprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(hairSprite);
+            CreatPart(fashionData.Hair_a, EPartType.Hair_a, 1);
         }
+
         if (fashionData.Hair_b != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Hair_b);
-
-            GameObject hairObj = new GameObject("Hair_b");
-            hairObj.transform.parent = rootTrans;
-
-            var hairSprite = Common.GetOrAddComponent<tk2dSprite>(hairObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            hairSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //hairSprite.SortingOrder = 3;
-            hairSprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(hairSprite);
+            CreatPart(fashionData.Hair_b, EPartType.Hair_b, 1);
         }
+
         if (fashionData.Cap_a != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Cap_a);
-
-            GameObject capObj = new GameObject("Cap_a");
-            capObj.transform.parent = rootTrans;
-
-            var capSprite = Common.GetOrAddComponent<tk2dSprite>(capObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            capSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //capSprite.SortingOrder = 4;
-            capSprite.SortingLevel = 2;
-
-            m_lstPartSprite.Add(capSprite);
+            CreatPart(fashionData.Cap_a, EPartType.Cap_a, 2);
         }
 
         if (fashionData.Cap_b != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Cap_b);
-
-            GameObject capObj = new GameObject("Cap_b");
-            capObj.transform.parent = rootTrans;
-
-            var capSprite = Common.GetOrAddComponent<tk2dSprite>(capObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            capSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //capSprite.SortingOrder = 4;
-            capSprite.SortingLevel = 2;
-
-            m_lstPartSprite.Add(capSprite);
+            CreatPart(fashionData.Cap_b, EPartType.Cap_b, 2);
         }
 
         if (fashionData.Pants_a != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Pants_a);
-
-            GameObject pant_1Obj = new GameObject("Pants_a");
-            pant_1Obj.transform.parent = rootTrans;
-
-            var pant_1Sprite = Common.GetOrAddComponent<tk2dSprite>(pant_1Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            pant_1Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //pant_1Sprite.SortingOrder = 5;
-            pant_1Sprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(pant_1Sprite);
+            CreatPart(fashionData.Pants_a, EPartType.Pants_a, 2);
         }
+
         if (fashionData.Pants_b != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Pants_b);
-
-            GameObject pant_1Obj = new GameObject("Pants_b");
-            pant_1Obj.transform.parent = rootTrans;
-
-            var pant_1Sprite = Common.GetOrAddComponent<tk2dSprite>(pant_1Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            pant_1Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //pant_1Sprite.SortingOrder = 5;
-            pant_1Sprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(pant_1Sprite);
+            CreatPart(fashionData.Pants_b, EPartType.Pants_b, 2);
         }
+
         if (fashionData.Pants_c != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Pants_c);
-
-            GameObject pant_1Obj = new GameObject("Pants_c");
-            pant_1Obj.transform.parent = rootTrans;
-
-            var pant_1Sprite = Common.GetOrAddComponent<tk2dSprite>(pant_1Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            pant_1Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //pant_1Sprite.SortingOrder = 5;
-            pant_1Sprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(pant_1Sprite);
+            CreatPart(fashionData.Pants_c, EPartType.Pants_c, 2);
         }
+
         if (fashionData.Pants_d != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Pants_d);
-
-            GameObject pant_2Obj = new GameObject("Pants_d");
-            pant_2Obj.transform.parent = rootTrans;
-
-            var pant_2Sprite = Common.GetOrAddComponent<tk2dSprite>(pant_2Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            pant_2Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //pant_2Sprite.SortingOrder = 5;
-            pant_2Sprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(pant_2Sprite);
+            CreatPart(fashionData.Pants_d, EPartType.Pants_d, 2);
         }
 
         if (fashionData.Shoes_a != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Shoes_a);
-
-            GameObject shoes_1Obj = new GameObject("Shoes_a");
-            shoes_1Obj.transform.parent = rootTrans;
-
-            var shoes_1Sprite = Common.GetOrAddComponent<tk2dSprite>(shoes_1Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            shoes_1Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //shoes_1Sprite.SortingOrder = 6;
-            shoes_1Sprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(shoes_1Sprite);
+            CreatPart(fashionData.Shoes_a, EPartType.Shoes_a, 2);
         }
 
         if (fashionData.Shoes_b != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Shoes_b);
-
-            GameObject shoes_2Obj = new GameObject("Shoes_b");
-            shoes_2Obj.transform.parent = rootTrans;
-
-            var shoes_2Sprite = Common.GetOrAddComponent<tk2dSprite>(shoes_2Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            shoes_2Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //shoes_2Sprite.SortingOrder = 6;
-            shoes_2Sprite.SortingLevel = 1;
-
-            m_lstPartSprite.Add(shoes_2Sprite);
+            CreatPart(fashionData.Shoes_b, EPartType.Shoes_b, 2);
         }
 
         if (fashionData.Belt_a != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Belt_a);
-
-            GameObject beltObj = new GameObject("Belt_a");
-            beltObj.transform.parent = rootTrans;
-
-            var beltSprite = Common.GetOrAddComponent<tk2dSprite>(beltObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            beltSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //beltSprite.SortingOrder = 7;
-            beltSprite.SortingLevel = 2;
-
-            m_lstPartSprite.Add(beltSprite);
+            CreatPart(fashionData.Belt_a, EPartType.Belt_a, 2);
         }
         if (fashionData.Belt_b != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Belt_b);
-
-            GameObject beltObj = new GameObject("Belt_b");
-            beltObj.transform.parent = rootTrans;
-
-            var beltSprite = Common.GetOrAddComponent<tk2dSprite>(beltObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            beltSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //beltSprite.SortingOrder = 7;
-            beltSprite.SortingLevel = 2;
-
-            m_lstPartSprite.Add(beltSprite);
+            CreatPart(fashionData.Belt_b, EPartType.Belt_b, 2);
         }
+
         if (fashionData.Belt_c != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Belt_c);
-
-            GameObject beltObj = new GameObject("Belt_c");
-            beltObj.transform.parent = rootTrans;
-
-            var beltSprite = Common.GetOrAddComponent<tk2dSprite>(beltObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            beltSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //beltSprite.SortingOrder = 7;
-            beltSprite.SortingLevel = 2;
-
-            m_lstPartSprite.Add(beltSprite);
+            CreatPart(fashionData.Belt_c, EPartType.Belt_c, 2);
         }
+
         if (fashionData.Belt_d != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Belt_d);
-
-            GameObject beltObj = new GameObject("Belt_d");
-            beltObj.transform.parent = rootTrans;
-
-            var beltSprite = Common.GetOrAddComponent<tk2dSprite>(beltObj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            beltSprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //beltSprite.SortingOrder = 7;
-            beltSprite.SortingLevel = 2;
-
-            m_lstPartSprite.Add(beltSprite);
+            CreatPart(fashionData.Belt_d, EPartType.Belt_d, 2);
         }
+
         if (fashionData.Weapon_a != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Weapon_a);
-
-            GameObject weapon_1Obj = new GameObject("Weapon_a");
-            weapon_1Obj.transform.parent = rootTrans;
-
-            var weapon_1Sprite = Common.GetOrAddComponent<tk2dSprite>(weapon_1Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            weapon_1Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //weapon_1Sprite.SortingOrder = 8;
-            weapon_1Sprite.SortingLevel = 2;
-
-            m_weaponSprite = weapon_1Sprite;
-            m_lstPartSprite.Add(weapon_1Sprite);
+            m_weaponSprite = CreatPart(fashionData.Weapon_a, EPartType.Weapon_a, 2);
         }
 
         if (fashionData.Weapon_b != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Weapon_b);
-
-            GameObject weapon_2Obj = new GameObject("Weapon_b");
-            weapon_2Obj.transform.parent = rootTrans;
-
-            var weapon_2Sprite = Common.GetOrAddComponent<tk2dSprite>(weapon_2Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            weapon_2Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //weapon_2Sprite.SortingOrder = 8;
-            weapon_2Sprite.SortingLevel = 2;
-
-            m_weaponSprite = weapon_2Sprite;
-            m_lstPartSprite.Add(weapon_2Sprite);
+            m_weaponSprite = CreatPart(fashionData.Weapon_b, EPartType.Weapon_b, 2);
         }
 
         if (fashionData.Weapon_c != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Weapon_c);
-
-            GameObject weapon_2Obj = new GameObject("Weapon_c");
-            weapon_2Obj.transform.parent = rootTrans;
-
-            var weapon_2Sprite = Common.GetOrAddComponent<tk2dSprite>(weapon_2Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            weapon_2Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //weapon_2Sprite.SortingOrder = 8;
-            weapon_2Sprite.SortingLevel = 2;
-
-            m_lstPartSprite.Add(weapon_2Sprite);
+            CreatPart(fashionData.Weapon_c, EPartType.Weapon_c, 2);
         }
+
         if (fashionData.Weapon_d != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Weapon_d);
-
-            GameObject weapon_2Obj = new GameObject("Weapon_d");
-            weapon_2Obj.transform.parent = rootTrans;
-
-            var weapon_2Sprite = Common.GetOrAddComponent<tk2dSprite>(weapon_2Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            weapon_2Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //weapon_2Sprite.SortingOrder = 8;
-            weapon_2Sprite.SortingLevel = 2;
-
-            m_lstPartSprite.Add(weapon_2Sprite);
+            CreatPart(fashionData.Weapon_d, EPartType.Weapon_d, 2);
         }
 
         if (fashionData.Subweapon_a != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Subweapon_a);
-
-            GameObject weapon_2Obj = new GameObject("Subweapon_a");
-            weapon_2Obj.transform.parent = rootTrans;
-
-            var weapon_2Sprite = Common.GetOrAddComponent<tk2dSprite>(weapon_2Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            weapon_2Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //weapon_2Sprite.SortingOrder = 8;
-            weapon_2Sprite.SortingLevel = 2;
-
-            m_lstPartSprite.Add(weapon_2Sprite);
+            CreatPart(fashionData.Subweapon_a, EPartType.Subweapon_a, 2);
         }
+
         if (fashionData.Subweapon_b != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Subweapon_b);
-
-            GameObject weapon_2Obj = new GameObject("Subweapon_b");
-            weapon_2Obj.transform.parent = rootTrans;
-
-            var weapon_2Sprite = Common.GetOrAddComponent<tk2dSprite>(weapon_2Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            weapon_2Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //weapon_2Sprite.SortingOrder = 8;
-            weapon_2Sprite.SortingLevel = 2;
-
-            m_lstPartSprite.Add(weapon_2Sprite);
+            CreatPart(fashionData.Subweapon_b, EPartType.Subweapon_b, 2);
         }
+
         if (fashionData.Subweapon_c != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Subweapon_c);
-
-            GameObject weapon_2Obj = new GameObject("Subweapon_c");
-            weapon_2Obj.transform.parent = rootTrans;
-
-            var weapon_2Sprite = Common.GetOrAddComponent<tk2dSprite>(weapon_2Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            weapon_2Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //weapon_2Sprite.SortingOrder = 8;
-            weapon_2Sprite.SortingLevel = 2;
-
-            m_lstPartSprite.Add(weapon_2Sprite);
+            CreatPart(fashionData.Subweapon_c, EPartType.Subweapon_c, 2);
         }
+
         if (fashionData.Subweapon_d != 0)
         {
-            var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(fashionData.Subweapon_d);
-
-            GameObject weapon_2Obj = new GameObject("Subweapon_d");
-            weapon_2Obj.transform.parent = rootTrans;
-
-            var weapon_2Sprite = Common.GetOrAddComponent<tk2dSprite>(weapon_2Obj);
-            tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-            weapon_2Sprite.SetSprite(tk2DSpriteCollectionData, 0);
-            //weapon_2Sprite.SortingOrder = 8;
-            weapon_2Sprite.SortingLevel = 2;
-
-            m_lstPartSprite.Add(weapon_2Sprite);
+            CreatPart(fashionData.Subweapon_d, EPartType.Subweapon_d, 2);
         }
 
         GameObject effectObj = new GameObject("Effect");
-        effectObj.transform.parent = rootTrans;
+        effectObj.transform.parent = m_animationTrans;
     }
+
+    private void ChangePart(uint partId, EPartType ePartType)
+    {
+        tk2dSprite partSprite;
+        if (m_dicTypeWithSprite.TryGetValue(ePartType, out partSprite))
+        {
+            if (partId == 0)
+            {
+                partSprite.gameObject.SetActive(false);
+            }
+            else
+            {
+                var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(partId);
+                tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
+                partSprite.gameObject.SetActive(true);
+                partSprite.SetSprite(tk2DSpriteCollectionData, 0);
+            }
+        }
+        else
+        {
+            if (partId != 0)
+            {
+                int sortLevel = 0;
+                if (1 <= (int)ePartType && (int)ePartType <= 9)
+                    sortLevel = 1;
+                else if (ePartType == 0)
+                    sortLevel = 0;
+                else
+                    sortLevel = 2;
+
+                CreatPart(partId, ePartType, sortLevel);
+            }
+        }
+    }
+
+    private void ChangeFashion(uint fashionId)
+    {
+        var fashionData = ConfigManager.Instance.GetData<FashionLoader, FashionLoader.Data>(fashionId);
+        ChangePart(fashionData.Body, EPartType.Body);
+        ChangePart(fashionData.Belt_a, EPartType.Belt_a);
+        ChangePart(fashionData.Belt_b, EPartType.Belt_b);
+        ChangePart(fashionData.Belt_c, EPartType.Belt_c);
+        ChangePart(fashionData.Belt_d, EPartType.Belt_d);
+        ChangePart(fashionData.Cap_a, EPartType.Cap_a);
+        ChangePart(fashionData.Cap_b, EPartType.Cap_b);
+        ChangePart(fashionData.Coat_a, EPartType.Coat_a);
+        ChangePart(fashionData.Coat_b, EPartType.Coat_b);
+        ChangePart(fashionData.Coat_c, EPartType.Coat_c);
+        ChangePart(fashionData.Coat_d, EPartType.Coat_d);
+        ChangePart(fashionData.Face_b, EPartType.Face_b);
+        ChangePart(fashionData.Face_c, EPartType.Face_c);
+        ChangePart(fashionData.Hair_a, EPartType.Hair_a);
+        ChangePart(fashionData.Hair_b, EPartType.Hair_b);
+        ChangePart(fashionData.Neck_c, EPartType.Neck_c);
+        ChangePart(fashionData.Neck_d, EPartType.Neck_d);
+        ChangePart(fashionData.Neck_x, EPartType.Neck_x);
+        ChangePart(fashionData.Pants_a, EPartType.Pants_a);
+        ChangePart(fashionData.Pants_b, EPartType.Pants_b);
+        ChangePart(fashionData.Pants_c, EPartType.Pants_c);
+        ChangePart(fashionData.Pants_d, EPartType.Pants_d);
+        ChangePart(fashionData.Shoes_a, EPartType.Shoes_a);
+        ChangePart(fashionData.Shoes_b, EPartType.Shoes_b);
+        ChangePart(fashionData.Subweapon_a, EPartType.Subweapon_a);
+        ChangePart(fashionData.Subweapon_b, EPartType.Subweapon_b);
+        ChangePart(fashionData.Subweapon_c, EPartType.Subweapon_c);
+        ChangePart(fashionData.Subweapon_d, EPartType.Subweapon_d);
+        ChangePart(fashionData.Subweapon_x, EPartType.Subweapon_x);
+        ChangePart(fashionData.Weapon_a, EPartType.Weapon_a);
+        ChangePart(fashionData.Weapon_b, EPartType.Weapon_b);
+        ChangePart(fashionData.Weapon_c, EPartType.Weapon_c);
+        ChangePart(fashionData.Weapon_d, EPartType.Weapon_d);
+        ChangePart(fashionData.Weapon_x, EPartType.Weapon_x);
+    }
+
+    private tk2dSprite CreatPart(uint partId, EPartType ePartType, int sortLevel)
+    {
+        if (partId == 0) return null;
+        var partData = ConfigManager.Instance.GetData<PartLoader, PartLoader.Data>(partId);
+
+        GameObject partObj = new GameObject(ePartType.ToString());
+        partObj.transform.parent = m_animationTrans;
+        partObj.transform.position = Vector3.zero;
+
+        var partSprite = Common.GetOrAddComponent<tk2dSprite>(partObj);
+        tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
+        partSprite.SetSprite(tk2DSpriteCollectionData, 0);
+        partSprite.SortingLevel = sortLevel;
+
+        m_lstPartSprite.Add(partSprite);
+        m_dicTypeWithSprite.Add(ePartType, partSprite);
+        return partSprite;
+    }
+
     private void UpdatePartSprite()
     {
         for (int i = 0; i < m_lstPartSprite.Count; i++)
         {
             m_lstPartSprite[i].SetSprite(m_tk2dSpriteAnimator.CurrentSpriteId);
-            
+
             m_lstPartSprite[i].SortingOrder = 600 - (int)m_owner.Transform.position.y + m_lstPartSprite[i].SortingLevel;
 
-            var bounds= m_weaponSprite.GetBounds();
+            var bounds = m_weaponSprite.GetBounds();
             Bounds newbounds = new Bounds(bounds.center + m_owner.Transform.position, bounds.extents * 4);
             m_owner.m_attackBounds = newbounds;
         }
