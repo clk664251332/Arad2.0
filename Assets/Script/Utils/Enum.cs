@@ -85,3 +85,42 @@ public enum ESkillType
     BuffType,//增加Buff的技能
 }
 
+public enum EPartType
+{
+    Body,
+    Hair_a,
+    Hair_b,
+    Cap_a,
+    Cap_b,
+    Face_b,
+    Face_c,
+    Neck_c,
+    Neck_d,
+    Neck_x,
+    Coat_a,
+    Coat_b,
+    Coat_c,
+    Coat_d,
+    Belt_a,
+    Belt_b,
+    Belt_c,
+    Belt_d,
+    Pants_a,
+    Pants_b,
+    Pants_c,
+    Pants_d,
+    Shoes_a,
+    Shoes_b,
+    Weapon_a,
+    Weapon_b,
+    Weapon_c,
+    Weapon_d,
+    Weapon_x,
+    Subweapon_a,
+    Subweapon_b,
+    Subweapon_c,
+    Subweapon_d,
+    Subweapon_x,
+    End,
+}
+
