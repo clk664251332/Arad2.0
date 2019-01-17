@@ -37,14 +37,14 @@ public abstract class BaseMovementState : BaseState
             {
                 m_stateManager.EnterState(EActionState.Skill1);
             }
-            if (Input.GetKeyDown(KeyCode.S) && m_owner.CanSkill)
-            {
-                m_stateManager.EnterState(EActionState.Skill2);
-            }
-            if (Input.GetKeyDown(KeyCode.D) && m_owner.CanSkill)
-            {
-                m_stateManager.EnterState(EActionState.Skill3);
-            }
+            //if (Input.GetKeyDown(KeyCode.S) && m_owner.CanSkill)
+            //{
+            //    m_stateManager.EnterState(EActionState.Skill2);
+            //}
+            //if (Input.GetKeyDown(KeyCode.D) && m_owner.CanSkill)
+            //{
+            //    m_stateManager.EnterState(EActionState.Skill3);
+            //}
         }
     }
 

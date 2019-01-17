@@ -327,11 +327,11 @@ public class AnimationAbility : BaseAbility
 
         GameObject partObj = new GameObject(ePartType.ToString());
         partObj.transform.parent = m_animationTrans;
-        partObj.transform.position = Vector3.zero;
+        partObj.transform.localPosition = Vector3.zero;
 
         var partSprite = Common.GetOrAddComponent<tk2dSprite>(partObj);
         tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
-        partSprite.SetSprite(tk2DSpriteCollectionData, 0);
+        partSprite.SetSprite(tk2DSpriteCollectionData, m_tk2dSpriteAnimator.CurrentSpriteId);
         partSprite.SortingLevel = sortLevel;
 
         m_lstPartSprite.Add(partSprite);
