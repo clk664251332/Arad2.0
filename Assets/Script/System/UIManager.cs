@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UIManager : SingletonObject<UIManager>
 {
@@ -24,6 +26,9 @@ public class UIManager : SingletonObject<UIManager>
         m_rootTrans = canvasObj.transform;
         canvas.renderMode = RenderMode.ScreenSpaceCamera;
         canvas.worldCamera = Camera.main;
+        canvas.sortingLayerName = "UI";
+
+        Common.GetOrAddComponent<GraphicRaycaster>(canvasObj);
     }
 
     private void InitMediator()
@@ -45,11 +50,13 @@ public class UIManager : SingletonObject<UIManager>
             }
         }
     }
+
     public void Update()
     {
         for (int i = 0; i < m_lstOpenMediator.Count; i++)
         {
-            m_lstOpenMediator[i].Update();
+            if (m_lstOpenMediator[i].IsOpen)
+                m_lstOpenMediator[i].Update();
         }
 
         if (Input.GetKeyDown(KeyCode.U))
@@ -128,5 +135,13 @@ public class UIManager : SingletonObject<UIManager>
     {
         string strMediatorName = typeof(T).ToString().ToLower();
         return GetMediator(strMediatorName) as T;
+    }
+
+    public void Release()
+    {
+        for (int i = 0; i < m_lstOpenMediator.Count; i++)
+        {
+            m_lstOpenMediator[i].Release();
+        }
     }
 }

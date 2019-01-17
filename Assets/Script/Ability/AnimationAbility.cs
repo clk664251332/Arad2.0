@@ -333,6 +333,7 @@ public class AnimationAbility : BaseAbility
         tk2dSpriteCollectionData tk2DSpriteCollectionData = tk2dSystem.LoadResourceByName<tk2dSpriteCollectionData>(partData.CollectionName);
         partSprite.SetSprite(tk2DSpriteCollectionData, m_tk2dSpriteAnimator.CurrentSpriteId);
         partSprite.SortingLevel = sortLevel;
+        partSprite.SortingLayer = "SortingObj";
 
         m_lstPartSprite.Add(partSprite);
         m_dicTypeWithSprite.Add(ePartType, partSprite);

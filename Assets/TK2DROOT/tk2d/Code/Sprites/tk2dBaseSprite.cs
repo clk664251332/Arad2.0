@@ -184,12 +184,26 @@ public abstract class tk2dBaseSprite : MonoBehaviour, tk2dRuntime.ISpriteCollect
 		}
 	}
 
-	/// <summary>
-	/// Flips the sprite horizontally. Set FlipX to true to flip it horizontally.
-	/// Note: The sprite itself may be flipped by the hierarchy above it or localScale
-	/// These functions do not consider those cases.
-	/// </summary>
-	public bool FlipX {
+    private string _sortingLayer;
+    public string SortingLayer
+    {
+        get
+        {
+            return CachedRenderer.sortingLayerName;
+        }
+
+        set
+        {
+            _sortingLayer = value;
+            CachedRenderer.sortingLayerName = value;
+        }
+    }
+    /// <summary>
+    /// Flips the sprite horizontally. Set FlipX to true to flip it horizontally.
+    /// Note: The sprite itself may be flipped by the hierarchy above it or localScale
+    /// These functions do not consider those cases.
+    /// </summary>
+    public bool FlipX {
 		get { return _scale.x < 0; }
 		set { scale = new Vector3( Mathf.Abs(_scale.x) * (value?-1:1), _scale.y, _scale.z ); }
 	}

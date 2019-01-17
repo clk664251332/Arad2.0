@@ -43,6 +43,7 @@ public class ClientMain : SingletonBehaviour<ClientMain>
         ConfigManager.Instance.Release();
         CharacterManager.Instance.Release();
         SkillEffectManager.Instance.Release();
+        UIManager.Instance.Release();
     }
 
     public void OnGUI()

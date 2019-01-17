@@ -18,6 +18,7 @@ public class BaseMediator
     private bool m_bOpen = false;
 
     private GameObject m_mediatorObj;
+    protected Transform m_mediatorTrans;
 
     public string PanelName
     {
@@ -61,6 +62,29 @@ public class BaseMediator
         }
     }
 
+    public ILayoutElement GetElement(string elementName)
+    {
+        if (m_mediatorTrans == null) return null;
+
+        int nLeft, nRight;
+        var childs = m_mediatorTrans.GetComponentsInChildren<Transform>();
+        for (int i = 0; i < childs.Length; i++)
+        {
+            string childName = childs[i].gameObject.name;
+            nLeft = childName.IndexOf("(");
+            nRight = childName.IndexOf(")");
+            if (nLeft == -1 || nRight == -1) continue;
+            string value = childName.Substring(nLeft + 1, nRight - nLeft - 1);
+
+            if (value == "Text")
+            {
+                return childs[i].GetComponent<Text>() as ILayoutElement;
+            }
+        }
+
+        return null;
+    }
+
     public void ToggleOpen()
     {
         if (m_eCurState != EState.Open)
@@ -79,6 +103,7 @@ public class BaseMediator
         ResetPos();
         m_eCurState = EState.Close;
         m_mediatorObj.SetActive(false);
+        OnClose();
     }
 
     private void ResetPos()
@@ -95,6 +120,7 @@ public class BaseMediator
             //显示在最前面
         }
 
+        OnOpen();
         m_eCurState = EState.Open;
         m_mediatorObj.SetActive(m_bOpen);
     }
@@ -107,9 +133,11 @@ public class BaseMediator
             m_mediatorObj = GameObject.Instantiate(loadObj);
             m_mediatorObj.transform.parent = UIManager.Instance.m_rootTrans;
             m_mediatorObj.SetActive(false);
+            m_mediatorTrans = m_mediatorObj.transform;
 
             if (m_bOpen)
             {
+                InitElement();
                 DirectOpen();
                 return;
             }
@@ -119,7 +147,26 @@ public class BaseMediator
         }
     }
 
-    public void Update()
+    public virtual void Update()
+    {
+
+    }
+
+    public virtual void InitElement()
+    {
+
+    }
+    public virtual void OnOpen()
+    {
+
+    }
+
+    public virtual void OnClose()
+    {
+
+    }
+
+    public virtual void Release()
     {
 
     }
