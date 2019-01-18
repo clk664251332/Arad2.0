@@ -5,12 +5,11 @@ using Game.Config;
 
 public class AnimationAbility : BaseAbility
 {
-    private tk2dSprite m_weaponSprite;
     private tk2dSpriteAnimator m_tk2dSpriteAnimator;
     public Transform m_animationTrans;
 
     private List<tk2dSprite> m_lstPartSprite = new List<tk2dSprite>();
-    private Dictionary<EPartType, tk2dSprite> m_dicTypeWithSprite = new Dictionary<EPartType, tk2dSprite>();
+    public Dictionary<EPartType, tk2dSprite> m_dicTypeWithSprite = new Dictionary<EPartType, tk2dSprite>();
 
     private uint fashionId = 1001;
     public tk2dSpriteAnimator GetTk2dSpriteAnimator()
@@ -205,12 +204,12 @@ public class AnimationAbility : BaseAbility
 
         if (fashionData.Weapon_a != 0)
         {
-            m_weaponSprite = CreatPart(fashionData.Weapon_a, EPartType.Weapon_a, 2);
+            CreatPart(fashionData.Weapon_a, EPartType.Weapon_a, 2);
         }
 
         if (fashionData.Weapon_b != 0)
         {
-            m_weaponSprite = CreatPart(fashionData.Weapon_b, EPartType.Weapon_b, 2);
+            CreatPart(fashionData.Weapon_b, EPartType.Weapon_b, 2);
         }
 
         if (fashionData.Weapon_c != 0)
@@ -347,10 +346,6 @@ public class AnimationAbility : BaseAbility
             m_lstPartSprite[i].SetSprite(m_tk2dSpriteAnimator.CurrentSpriteId);
 
             m_lstPartSprite[i].SortingOrder = 600 - (int)m_owner.Transform.position.y + m_lstPartSprite[i].SortingLevel;
-
-            var bounds = m_weaponSprite.GetBounds();
-            Bounds newbounds = new Bounds(bounds.center + m_owner.Transform.position, bounds.extents * 4);
-            m_owner.m_attackBounds = newbounds;
         }
     }
 

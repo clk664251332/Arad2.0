@@ -67,13 +67,13 @@ public class ClientMain : SingletonBehaviour<ClientMain>
         //}
     }
 
-    public void OnDrawGizmos()
-    {
-        Gizmos.color = Color.red;
-        var characterList = CharacterManager.Instance.GetCharacterList();
-        for (int i = 0; i < characterList.Count; i++)
-        {
-            Gizmos.DrawWireCube(characterList[i].m_attackBounds.center, characterList[i].m_attackBounds.extents);
-        }
-    }
+    //public void OnDrawGizmos()
+    //{
+    //    Gizmos.color = Color.red;
+    //    var characterList = CharacterManager.Instance.GetCharacterList();
+    //    for (int i = 0; i < characterList.Count; i++)
+    //    {
+    //        Gizmos.DrawWireCube(characterList[i].m_attackBounds.center, characterList[i].m_attackBounds.extents);
+    //    }
+    //}
 }

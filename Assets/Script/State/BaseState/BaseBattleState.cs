@@ -9,6 +9,7 @@ public abstract class BaseBattleState : BaseState
     protected float m_fAttackMoveFriction = 0;
 
     private ProfessionSkillLoader.Data m_professionSkillLoaderData;
+    private AnimationAbility m_animationAbility;
     protected SkillLoader.Data m_skillData;
     protected uint m_nSkillId;
     protected ESkillType m_eSkillType;
@@ -24,6 +25,7 @@ public abstract class BaseBattleState : BaseState
     public override void EnterState(EActionState eLastState)
     {
         base.EnterState(eLastState);
+        if (m_animationAbility == null) m_animationAbility = m_owner.GetAbility<AnimationAbility>();
         GetSkillData();
         m_eSkillType = ConfigManager.Instance.GetLoader<SkillLoader>().GetSKillType(m_nSkillId);
 
@@ -66,7 +68,13 @@ public abstract class BaseBattleState : BaseState
         //碰撞检测
         if (m_tk2DSpriteAnimator.CurrentFrame == m_skillData.AttackFramIndex && m_bCanHit && m_eSkillType == ESkillType.WeaponType)
         {
-            var coliders = Physics2D.OverlapBoxAll(m_owner.m_attackBounds.center, m_owner.m_attackBounds.extents, 0);
+            tk2dSprite attackSprite;
+            m_animationAbility.m_dicTypeWithSprite.TryGetValue((EPartType)m_skillData.AttackPart, out attackSprite);
+            if (attackSprite == null) return;
+            var spriteBound = attackSprite.GetBounds();
+            Bounds attackBound = new Bounds(spriteBound.center + m_owner.Transform.position, spriteBound.extents * 4);
+
+            var coliders = Physics2D.OverlapBoxAll(attackBound.center, attackBound.extents, 0);
             for (int i = 0; i < coliders.Length; i++)
             {
                 int transId = coliders[i].transform.parent.parent.GetInstanceID();

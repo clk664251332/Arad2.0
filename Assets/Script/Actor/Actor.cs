@@ -23,7 +23,6 @@ public class Actor : Entity
     private bool m_bIsRun = false;
     private bool m_bIsJump = false;
 
-    public Bounds m_attackBounds;
     public bool CanMove
     {
         get
