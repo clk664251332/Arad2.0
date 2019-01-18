@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 public enum EState
@@ -62,23 +63,31 @@ public class BaseMediator
         }
     }
 
-    public ILayoutElement GetElement(string elementName)
+    public UIBehaviour GetElement(string elementName)
     {
         if (m_mediatorTrans == null) return null;
 
-        int nLeft, nRight;
+        int nEnd;
         var childs = m_mediatorTrans.GetComponentsInChildren<Transform>();
         for (int i = 0; i < childs.Length; i++)
         {
-            string childName = childs[i].gameObject.name;
-            nLeft = childName.IndexOf("(");
-            nRight = childName.IndexOf(")");
-            if (nLeft == -1 || nRight == -1) continue;
-            string value = childName.Substring(nLeft + 1, nRight - nLeft - 1);
+            string strName = childs[i].gameObject.name;
+            nEnd = strName.IndexOf(")");
 
-            if (value == "Text")
+            if (nEnd == -1) continue;
+            string strSub = strName.Substring(0, nEnd + 1);
+
+            if (strSub.Equals("(Text)") && strName.Equals(elementName))
             {
-                return childs[i].GetComponent<Text>() as ILayoutElement;
+                return childs[i].GetComponent<Text>() as UIBehaviour;
+            }
+            else if(strSub.Equals("(Button)") && strName.Equals(elementName))
+            {
+                return childs[i].GetComponent<Button>() as UIBehaviour;
+            }
+            else if (strSub.Equals("(Image)") && strName.Equals(elementName))
+            {
+                return childs[i].GetComponent<Image>() as UIBehaviour;
             }
         }
 
@@ -103,7 +112,7 @@ public class BaseMediator
         ResetPos();
         m_eCurState = EState.Close;
         m_mediatorObj.SetActive(false);
-        OnClose();
+        //OnClose();
     }
 
     private void ResetPos()
@@ -161,9 +170,9 @@ public class BaseMediator
 
     }
 
-    public virtual void OnClose()
+    public virtual void Close()
     {
-
+        UIManagerClose();
     }
 
     public virtual void Release()
