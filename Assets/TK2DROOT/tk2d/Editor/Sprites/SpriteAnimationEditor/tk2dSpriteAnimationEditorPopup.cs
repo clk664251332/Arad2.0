@@ -354,15 +354,16 @@ public class tk2dSpriteAnimationEditorPopup : EditorWindow
 
 		tk2dSpriteAnimationClip source = FindValidClip();
 		clip.frames = new tk2dSpriteAnimationFrame[1];
-		clip.frames[0] = new tk2dSpriteAnimationFrame();
-		if (source != null)
+        clip.frames[0] = new tk2dSpriteAnimationFrame();
+
+        if (source != null)
 		{
 			clip.frames[0].CopyFrom(source.frames[0]);
 		}
 		else
 		{
-			clip.frames[0].spriteCollection = tk2dSpriteGuiUtility.GetDefaultSpriteCollection();
-			clip.frames[0].spriteId = clip.frames[0].spriteCollection.FirstValidDefinitionIndex;
+			clip.frames[0].frameSprites[0].spriteCollection = tk2dSpriteGuiUtility.GetDefaultSpriteCollection();
+			clip.frames[0].frameSprites[0].spriteId = clip.frames[0].frameSprites[0].spriteCollection.FirstValidDefinitionIndex;
 		}
 
 		bool inserted = false;

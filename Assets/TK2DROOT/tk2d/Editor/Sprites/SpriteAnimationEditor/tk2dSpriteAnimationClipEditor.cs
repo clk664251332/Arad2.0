@@ -52,8 +52,8 @@ namespace tk2dEditor.SpriteAnimationEditor
 				fg.spriteCollection = spriteCollection;
 				fg.spriteId = spriteId;
 				foreach (tk2dSpriteAnimationFrame frame in fg.frames) {
-					frame.spriteCollection = spriteCollection;
-					frame.spriteId = spriteId;
+					frame.frameSprites[0].spriteCollection = spriteCollection;
+					frame.frameSprites[0].spriteId = spriteId;
 				}
 				RecalculateFrames();
 				Repaint();
@@ -100,8 +100,8 @@ namespace tk2dEditor.SpriteAnimationEditor
 				while (frames.Count < targetFrameCount)
 				{
 					tk2dSpriteAnimationFrame f = new tk2dSpriteAnimationFrame();
-					f.spriteCollection = spriteCollection;
-					f.spriteId = spriteId;
+					f.frameSprites[0].spriteCollection = spriteCollection;
+					f.frameSprites[0].spriteId = spriteId;
 					frames.Add(f);
 					changed = true;
 				}
@@ -124,8 +124,8 @@ namespace tk2dEditor.SpriteAnimationEditor
 			{
 				foreach (tk2dSpriteAnimationFrame frame in frames)
 				{
-					frame.spriteCollection = spriteCollection;
-					frame.spriteId = spriteId;
+					frame.frameSprites[0].spriteCollection = spriteCollection;
+					frame.frameSprites[0].spriteId = spriteId;
 				}
 			}
 		}
@@ -160,12 +160,12 @@ namespace tk2dEditor.SpriteAnimationEditor
 			bool invalidSpriteIdFound = false;
 			for (int i = 0; i < clip.frames.Length; ++i) {
 				tk2dSpriteAnimationFrame frame = clip.frames[i];
-				if (frame.spriteCollection == null) {
+				if (frame.frameSprites[0].spriteCollection == null) {
 					nullCollectionFound = true;
 				}
 				else {
-					if (!frame.spriteCollection.IsValidSpriteId(frame.spriteId)) {
-						if (frame.spriteCollection.FirstValidDefinitionIndex == -1) {
+					if (!frame.frameSprites[0].spriteCollection.IsValidSpriteId(frame.frameSprites[0].spriteId)) {
+						if (frame.frameSprites[0].spriteCollection.FirstValidDefinitionIndex == -1) {
 							nullCollectionFound = true;
 						}
 						else {
@@ -184,8 +184,8 @@ namespace tk2dEditor.SpriteAnimationEditor
 				if (EditorUtility.DisplayDialog("Invalid sprite found in clip.", "An invalid sprite has been found in the selected clip. Has the sprite been deleted from the collection?\n\nDo you wish to replace this with a valid sprite from the collection?\n\nThis may not be correct, but you will be able to edit the clip after this.", "Yes", "No")) {
 					for (int i = 0; i < clip.frames.Length; ++i) {
 						tk2dSpriteAnimationFrame frame = clip.frames[i];
-						if (!frame.spriteCollection.IsValidSpriteId(frame.spriteId)) {
-							frame.spriteId = frame.spriteCollection.FirstValidDefinitionIndex;
+						if (!frame.frameSprites[0].spriteCollection.IsValidSpriteId(frame.frameSprites[0].spriteId)) {
+							frame.frameSprites[0].spriteId = frame.frameSprites[0].spriteCollection.FirstValidDefinitionIndex;
 						}
 					}
 					return true;
@@ -223,15 +223,15 @@ namespace tk2dEditor.SpriteAnimationEditor
 						for (int i = 0; i < clip.frames.Length; ++i)
 						{
 							tk2dSpriteAnimationFrame f = clip.frames[i];
-							if (f.spriteCollection != lastSc || f.spriteId != lastSpriteId)
+							if (f.frameSprites[0].spriteCollection != lastSc || f.frameSprites[0].spriteId != lastSpriteId)
 							{
 								if (frameGroup != null) frameGroups.Add(frameGroup);
 								frameGroup = new FrameGroup();
-								frameGroup.spriteCollection = f.spriteCollection;
-								frameGroup.spriteId = f.spriteId;
+								frameGroup.spriteCollection = f.frameSprites[0].spriteCollection;
+								frameGroup.spriteId = f.frameSprites[0].spriteId;
 							}
-							lastSc = f.spriteCollection;
-							lastSpriteId = f.spriteId;
+							lastSc = f.frameSprites[0].spriteCollection;
+							lastSpriteId = f.frameSprites[0].spriteId;
 							frameGroup.frames.Add(f);
 						}
 						if (frameGroup != null) frameGroups.Add(frameGroup);

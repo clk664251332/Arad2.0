@@ -124,7 +124,7 @@ namespace tk2dEditor.SpriteAnimationEditor
 			int requiredWidth = space + (clip.frames.Length + 1) * frameWidth;
 			int clipHeightTotal = (requiredWidth > windowWidth) ? clipHeightScrollBar : clipHeight;
 
-			clipScrollbar = GUILayout.BeginScrollView(clipScrollbar, GUILayout.Height(clipHeightTotal), GUILayout.ExpandWidth(true));
+			clipScrollbar = GUILayout.BeginScrollView(clipScrollbar, GUILayout.Height(clipHeightTotal+50), GUILayout.ExpandWidth(true));
 			GUILayout.BeginVertical();
 		
 			// Draw timeline axis
@@ -212,7 +212,14 @@ namespace tk2dEditor.SpriteAnimationEditor
 					/* highlighted: */	 currrentFrameGroup == state.selectedFrame,
 					/* showTime: */		 currrentFrameGroup == state.selectedFrame,
 					/* playHighlight: */ clipTimeMarker >= fg.startFrame && clipTimeMarker < fg.startFrame + fg.frames.Count);
-				if (!singleFrameMode)
+
+                r.y += 50;
+                DrawFrameGroupEx(r, clip, fg,
+                    /* highlighted: */     currrentFrameGroup == state.selectedFrame,
+                    /* showTime: */         currrentFrameGroup == state.selectedFrame,
+                    /* playHighlight: */ clipTimeMarker >= fg.startFrame && clipTimeMarker < fg.startFrame + fg.frames.Count);
+
+                if (!singleFrameMode)
 					EditorGUIUtility.AddCursorRect(GetResizeRectFromFrameRect(r), MouseCursor.ResizeHorizontal);
 
 				currrentFrameGroup++;

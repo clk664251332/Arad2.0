@@ -464,7 +464,7 @@ class tk2dSpriteEditor : Editor
 					animator.Library = anim;
 					animator.DefaultClipId = clipId;
 					tk2dSpriteAnimationClip clip = anim.GetClipById(clipId);
-					animator.SetSprite( clip.frames[0].spriteCollection, clip.frames[0].spriteId );
+					animator.SetSprite( clip.frames[0].frameSprites[0].spriteCollection, clip.frames[0].frameSprites[0].spriteId );
 				}
 			});
 		}

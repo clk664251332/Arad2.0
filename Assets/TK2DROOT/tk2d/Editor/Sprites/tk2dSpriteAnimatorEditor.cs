@@ -92,8 +92,8 @@ public class tk2dSpriteAnimatorEditor : Editor
 					{
 						if (animator.Sprite != null) {
 							// automatically switch to the first frame of the new clip
-							animator.Sprite.SetSprite(animator.Library.clips[animator.DefaultClipId].frames[0].spriteCollection,
-						                  			  animator.Library.clips[animator.DefaultClipId].frames[0].spriteId);
+							animator.Sprite.SetSprite(animator.Library.clips[animator.DefaultClipId].frames[0].frameSprites[0].spriteCollection,
+						                  			  animator.Library.clips[animator.DefaultClipId].frames[0].frameSprites[0].spriteId);
 						}
 					}
 				}
@@ -137,8 +137,8 @@ public class tk2dSpriteAnimatorEditor : Editor
 
 						if (animator.Sprite != null) {
 							// automatically switch to the first frame of the new clip
-							animator.Sprite.SetSprite(animator.Library.clips[animator.DefaultClipId].frames[0].spriteCollection,
-													  animator.Library.clips[animator.DefaultClipId].frames[0].spriteId);
+							animator.Sprite.SetSprite(animator.Library.clips[animator.DefaultClipId].frames[0].frameSprites[0].spriteCollection,
+													  animator.Library.clips[animator.DefaultClipId].frames[0].frameSprites[0].spriteId);
 						}
 					}
 				}
@@ -173,8 +173,8 @@ public class tk2dSpriteAnimatorEditor : Editor
 			{
 				for (int i = 0; i < a.clips.Length; ++i) {
 					if (!a.clips[i].Empty &&
-						a.clips[i].frames[0].spriteCollection != null &&
-						a.clips[i].frames[0].spriteId >= 0) {
+						a.clips[i].frames[0].frameSprites[0].spriteCollection != null &&
+						a.clips[i].frames[0].frameSprites[0].spriteId >= 0) {
 						clipId = i;
 						break;
 					}
@@ -203,7 +203,7 @@ public class tk2dSpriteAnimatorEditor : Editor
 		GameObject go = tk2dEditorUtility.CreateGameObjectInScene("AnimatedSprite");
 
 		tk2dSprite sprite = go.AddComponent<tk2dSprite>();
-		sprite.SetSprite(anim.clips[clipId].frames[0].spriteCollection, anim.clips[clipId].frames[0].spriteId);
+		sprite.SetSprite(anim.clips[clipId].frames[0].frameSprites[0].spriteCollection, anim.clips[clipId].frames[0].frameSprites[0].spriteId);
 
 		tk2dSpriteAnimator animator = go.AddComponent<tk2dSpriteAnimator>();
 		animator.Library = anim;

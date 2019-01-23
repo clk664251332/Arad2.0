@@ -2,24 +2,44 @@ using UnityEngine;
 using System.Collections;
 
 [System.Serializable]
+public class FrameSprite
+{
+    /// <summary>
+    /// The sprite collection.
+    /// </summary>
+    public tk2dSpriteCollectionData spriteCollection;
+    /// <summary>
+    /// The sprite identifier.
+    /// </summary>
+    public int spriteId;
+}
+
+[System.Serializable]
 /// <summary>
 /// Defines an animation frame and associated data.
+/// 拓展修改：可支持多个图集与图片ID
 /// </summary>
 public class tk2dSpriteAnimationFrame
 {
-	/// <summary>
-	/// The sprite collection.
-	/// </summary>
-	public tk2dSpriteCollectionData spriteCollection;
-	/// <summary>
-	/// The sprite identifier.
-	/// </summary>
-	public int spriteId;
-	
-	/// <summary>
-	/// When true will trigger an animation event when this frame is displayed
-	/// </summary>
-	public bool triggerEvent = false;
+    public tk2dSpriteAnimationFrame()
+    {
+        frameSprites = new FrameSprite[1];
+        frameSprites[0] = new FrameSprite();
+    }
+    ///// <summary>
+    ///// The sprite collection.
+    ///// </summary>
+    //public tk2dSpriteCollectionData spriteCollection;
+    ///// <summary>
+    ///// The sprite identifier.
+    ///// </summary>
+    //public int spriteId;
+
+    public FrameSprite[] frameSprites = new FrameSprite[0];
+    /// <summary>
+    /// When true will trigger an animation event when this frame is displayed
+    /// </summary>
+    public bool triggerEvent = false;
 	/// <summary>
 	/// Custom event data (string)
 	/// </summary>
@@ -56,10 +76,12 @@ public class tk2dSpriteAnimationFrame
 	
 	public void CopyFrom(tk2dSpriteAnimationFrame source, bool full)
 	{
-		spriteCollection = source.spriteCollection;
-		spriteId = source.spriteId;
-		
-		if (full) CopyTriggerFrom(source);
+        //spriteCollection = source.spriteCollection;
+        //spriteId = source.spriteId;
+
+        frameSprites = source.frameSprites;
+
+        if (full) CopyTriggerFrom(source);
 	}
 }
 
@@ -277,7 +299,7 @@ public class tk2dSpriteAnimation : MonoBehaviour
 	public tk2dSpriteAnimationClip FirstValidClip {
 		get {
 			for (int i = 0; i < clips.Length; ++i) {
-				if (!clips[i].Empty && clips[i].frames[0].spriteCollection != null && clips[i].frames[0].spriteId != -1) {
+				if (!clips[i].Empty && clips[i].frames[0].frameSprites[0].spriteCollection != null && clips[i].frames[0].frameSprites[0].spriteId != -1) {
 					return clips[i];
 				}
 			}

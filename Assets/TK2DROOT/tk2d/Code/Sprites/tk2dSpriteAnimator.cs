@@ -164,7 +164,7 @@ public class tk2dSpriteAnimator : MonoBehaviour
 		tk2dSpriteAnimationClip clip = anim.clips[clipId];
 		tk2dSpriteAnimator animSprite = go.AddComponent<tk2dSpriteAnimator>();
 		animSprite.Library = anim;
-		animSprite.SetSprite(clip.frames[0].spriteCollection, clip.frames[0].spriteId);
+		animSprite.SetSprite(clip.frames[0].frameSprites[0].spriteCollection, clip.frames[0].frameSprites[0].spriteId);
 		return animSprite;
 	}
 	
@@ -386,7 +386,7 @@ public class tk2dSpriteAnimator : MonoBehaviour
 	{
 		if (currentClip != null)
 		{
-			SetSprite(currentClip.frames[0].spriteCollection, currentClip.frames[0].spriteId);
+			SetSprite(currentClip.frames[0].frameSprites[0].spriteCollection, currentClip.frames[0].frameSprites[0].spriteId);
 		}
 		Stop();
 	}
@@ -701,7 +701,7 @@ public class tk2dSpriteAnimator : MonoBehaviour
 		int frameId = (int)clipTime % clip.frames.Length;
 		tk2dSpriteAnimationFrame frame = clip.frames[frameId];
 		
-		SetSprite(frame.spriteCollection, frame.spriteId);
+		SetSprite(frame.frameSprites[0].spriteCollection, frame.frameSprites[0].spriteId);
 		if (frame.triggerEvent)
 		{
 			if (AnimationEventTriggered != null) {
@@ -715,7 +715,7 @@ public class tk2dSpriteAnimator : MonoBehaviour
 	{
 		if (previousFrame != currFrame)
 		{
-			SetSprite( currentClip.frames[currFrame].spriteCollection, currentClip.frames[currFrame].spriteId );
+			SetSprite( currentClip.frames[currFrame].frameSprites[0].spriteCollection, currentClip.frames[currFrame].frameSprites[0].spriteId );
             previousFrame = currFrame;
 		}
 	}

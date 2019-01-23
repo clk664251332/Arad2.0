@@ -133,7 +133,7 @@ public class tk2dAnimatedSprite : tk2dSprite
 	{
 		var clip = anim.clips[clipId];
 		tk2dAnimatedSprite animSprite = go.AddComponent<tk2dAnimatedSprite>();
-		animSprite.SetSprite(clip.frames[0].spriteCollection, clip.frames[0].spriteId);
+		animSprite.SetSprite(clip.frames[0].frameSprites[0].spriteCollection, clip.frames[0].frameSprites[0].spriteId);
 		animSprite.anim = anim;
 		return animSprite;
 	}

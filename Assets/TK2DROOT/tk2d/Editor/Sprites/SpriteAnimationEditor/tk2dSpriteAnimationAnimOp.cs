@@ -50,8 +50,9 @@ namespace tk2dEditor.SpriteAnimationEditor
 			fg.spriteCollection = src.spriteCollection;
 			fg.spriteId = src.spriteId;
 			tk2dSpriteAnimationFrame f = new tk2dSpriteAnimationFrame();
-			f.spriteCollection = fg.spriteCollection;
-			f.spriteId = fg.spriteId;
+
+            f.frameSprites[0].spriteCollection = fg.spriteCollection;
+			f.frameSprites[0].spriteId = fg.spriteId;
 			fg.frames.Add(f);
 			return fg;
 		}
