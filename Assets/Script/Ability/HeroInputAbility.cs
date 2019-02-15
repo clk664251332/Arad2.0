@@ -46,6 +46,7 @@ public class HeroInputAbility : BaseAbility
 
         m_owner.m_actorEventHandler.AddEvent(EEventType.AttrChange + (int)EActorAttr.WalkSpeed, new Callback(OnWalkSpeedChange));
         m_owner.m_actorEventHandler.AddEvent(EEventType.AttrChange + (int)EActorAttr.RunSpeed, new Callback(OnRunSpeedChange));
+        EventManager.Instance.AddInputEvent(null, EEventType.InputManager_MouseRightClick, new BoolCallback(OnMouseRightClick));
     }
 
     public override void GetComponent()
@@ -138,5 +139,11 @@ public class HeroInputAbility : BaseAbility
     private void OnRunSpeedChange()
     {
         m_runSpeed = m_owner.GetAttr(EActorAttr.RunSpeed).Value;
+    }
+
+    private bool OnMouseRightClick()
+    {
+        Debug.Log("Click!");
+        return true;
     }
 }

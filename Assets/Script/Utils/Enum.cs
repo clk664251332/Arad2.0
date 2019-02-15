@@ -38,6 +38,9 @@ public enum EActionState
 public enum EEventType
 {
     AttrChange = 100,
+    InputManager_Event_Start,
+    InputManager_MouseRightClick,
+    InputManager_Event_End,
 }
 
 public enum EActorAttr

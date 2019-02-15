@@ -21,8 +21,10 @@ public class ClientMain : SingletonBehaviour<ClientMain>
     {
         //创建各个系统
         ConfigManager.Instance.Initialize();
+        EventManager.Instance.Initialize();
         CharacterManager.Instance.Initialize();
         UIManager.Instance.Initialize();
+        KeyBindingManager.Instance.Initialize();
     }
 
     public void Update()
@@ -31,6 +33,7 @@ public class ClientMain : SingletonBehaviour<ClientMain>
         CharacterManager.Instance.Update();
         SkillEffectManager.Instance.Update();
         UIManager.Instance.Update();
+        KeyBindingManager.Instance.Update();
     }
 
     public void FixedUpdate()
@@ -44,6 +47,7 @@ public class ClientMain : SingletonBehaviour<ClientMain>
         CharacterManager.Instance.Release();
         SkillEffectManager.Instance.Release();
         UIManager.Instance.Release();
+        KeyBindingManager.Instance.Release();
     }
 
     public void OnGUI()
