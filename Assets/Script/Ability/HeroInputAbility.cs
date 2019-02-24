@@ -17,6 +17,8 @@ public class HeroInputAbility : BaseAbility
     private float m_walkSpeed;
     private float m_runSpeed;
 
+    private BaseStateManager m_stateManager;
+
     public Vector2 Velocity
     {
         get
@@ -44,9 +46,15 @@ public class HeroInputAbility : BaseAbility
         m_walkSpeed = m_owner.GetAttr(EActorAttr.WalkSpeed).Value;
         m_runSpeed = m_owner.GetAttr(EActorAttr.RunSpeed).Value;
 
+        if (m_stateManager == null)
+            m_stateManager = m_owner.GetStateMgr();
+
         m_owner.m_actorEventHandler.AddEvent(EEventType.AttrChange + (int)EActorAttr.WalkSpeed, new Callback(OnWalkSpeedChange));
         m_owner.m_actorEventHandler.AddEvent(EEventType.AttrChange + (int)EActorAttr.RunSpeed, new Callback(OnRunSpeedChange));
-        EventManager.Instance.AddInputEvent(null, EEventType.InputManager_MouseRightClick, new BoolCallback(OnMouseRightClick));
+
+        EventManager.Instance.AddInputEvent(null, EEventType.InputManager_AttackInIdle, new BoolCallback(Attack));
+        EventManager.Instance.AddInputEvent(null, EEventType.InputManager_Jump, new BoolCallback(Jump));
+        EventManager.Instance.AddInputEvent(null, EEventType.InputManager_Skill1, new BoolCallback(Skill1));
     }
 
     public override void GetComponent()
@@ -141,9 +149,46 @@ public class HeroInputAbility : BaseAbility
         m_runSpeed = m_owner.GetAttr(EActorAttr.RunSpeed).Value;
     }
 
-    private bool OnMouseRightClick()
+    private bool Attack()
     {
-        Debug.Log("Click!");
-        return true;
+        if (m_owner.CanAttack && m_owner.IsRun == false)
+        {
+            m_stateManager.EnterState(EActionState.Attack1);
+            return true;
+        }
+        else
+            return false;
     }
+
+    private bool Jump()
+    {
+        if (m_owner.CanJump == true)
+        {
+            m_stateManager.EnterState(EActionState.Jump_Prepare);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    private bool Skill1()
+    {
+        if (m_owner.CanSkill)
+        {
+            m_stateManager.EnterState(EActionState.Skill1);
+            return true;
+        }
+        else
+            return false;
+    }
+
+    //private bool Skill2()
+    //{
+
+    //}
+
+    //private bool Skill3()
+    //{
+
+    //}
 }

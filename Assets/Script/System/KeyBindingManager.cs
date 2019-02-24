@@ -21,6 +21,7 @@ public class KeyBindingManager : SingletonObject<KeyBindingManager>
         OnUI, //只接受NGUI上的信息
         ExceptUI,//除了UI
         OnUIInCludeChatArea,//只接受NGUI包括聊天区域上的信息
+        ActorAttack,//只接受角色在攻击状态下的信息
     }
 
     //键盘操作方式
@@ -232,7 +233,16 @@ public class KeyBindingManager : SingletonObject<KeyBindingManager>
 
         ////同一操作的权重由高到低触发事件，高权重的事件触发了，低权重的事件就被屏蔽
         ////根据事件绑定返回bool值为true代表这个事件类型触发了，否则继续遍历权重，直到较高权重的事件触发，屏蔽低权重的事件
-        AddKeyBind(KeyCode.M, EEventType.InputManager_MouseRightClick, EPriority.HeroOther);
+        AddKeyBind(KeyCode.X, EEventType.InputManager_AttackInIdle, EPriority.HeroOther,EKeyClick.Down);
+        AddKeyBind(KeyCode.X, EEventType.InputManager_AttackInIdle, EPriority.HeroOther, EKeyClick.Keep);
+
+        AddKeyBind(KeyCode.X, EEventType.InputManager_AttackInAttack, EPriority.HeroOther, EKeyClick.Down, ELimitCon.ActorAttack);
+        AddKeyBind(KeyCode.X, EEventType.InputManager_AttackInAttack, EPriority.HeroOther, EKeyClick.Keep, ELimitCon.ActorAttack);
+
+        AddKeyBind(KeyCode.C, EEventType.InputManager_Jump, EPriority.HeroOther);
+        AddKeyBind(KeyCode.Z, EEventType.InputManager_Skill1, EPriority.HeroOther);
+        AddKeyBind(KeyCode.L, EEventType.InputManager_ChangeCloth, EPriority.HeroOther);
+        AddKeyBind(KeyCode.U, EEventType.InputManager_ShowUI, EPriority.HeroOther);
         //AddKeyBind(KeyCode.Mouse0, EEventType.InputManager_Url_Item_Left_Click, EPriority.UI);
         //AddKeyBind(KeyCode.Mouse1, EEventType.InputManager_Url_Item_Right_Click, EPriority.UI);
         //AddKeyBind(KeyCode.Mouse1, EEventType.InputManager_Cancel_Cursor_State, EPriority.UI);
@@ -477,23 +487,15 @@ public class KeyBindingManager : SingletonObject<KeyBindingManager>
                 break;
             }
 
-            //bool bNgui = UIManager.GetInst().MouseInUI();
-            //bool bInChatArea = UIManager.GetInst().IsMouseInChatArea();
-            //bool bCheckCon = true;
-            //if (eventInfo.eLimitCon == ELimitCon.OnUI && !bNgui)
-            //{
-            //    bCheckCon = false;
-            //}
-            //else if (eventInfo.eLimitCon == ELimitCon.OnUIInCludeChatArea && !bNgui && !bInChatArea)
-            //{
-            //    bCheckCon = false;
-            //}
-            //else if (eventInfo.eLimitCon == ELimitCon.ExceptUI && bNgui)
-            //{
-            //    bCheckCon = false;
-            //}
+            bool isAttack = SingletonObject<Hero>.Instance.IsAtatck;
+            bool bCheckCon = true;
 
-            //if (bCheckCon)
+            if (eventInfo.eLimitCon == ELimitCon.ActorAttack && !isAttack)
+            {
+                bCheckCon = false;
+            }
+
+            if (bCheckCon)
             {
                 //触发事件 决定是否事件传递
                 if (InputEventHandler.SendEvent(eventInfo.eEventType))

@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2015
+# Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arad2.0.Plugins", "Arad2.0.Plugins.csproj", "{66168EF0-8640-2879-8F00-0627844946C8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Arad2.0", "Arad2.0.csproj", "{91F3AE00-B1F5-92DB-ED10-25E71C5E71F0}"

@@ -23,29 +23,29 @@ public abstract class BaseMovementState : BaseState
     public override void OnUpdate()
     {
         base.OnUpdate();
-        if(m_owner is Hero)
-        {
-            if (Input.GetKey(KeyCode.X) && m_owner.CanAttack && m_owner.IsRun == false)
-            {
-                m_stateManager.EnterState(EActionState.Attack1);
-            }
-            if (Input.GetKeyDown(KeyCode.C) && m_owner.CanJump == true)
-            {
-                m_stateManager.EnterState(EActionState.Jump_Prepare);
-            }
-            if (Input.GetKeyDown(KeyCode.Z) && m_owner.CanSkill)
-            {
-                m_stateManager.EnterState(EActionState.Skill1);
-            }
-            //if (Input.GetKeyDown(KeyCode.S) && m_owner.CanSkill)
-            //{
-            //    m_stateManager.EnterState(EActionState.Skill2);
-            //}
-            //if (Input.GetKeyDown(KeyCode.D) && m_owner.CanSkill)
-            //{
-            //    m_stateManager.EnterState(EActionState.Skill3);
-            //}
-        }
+        //if(m_owner is Hero)
+        //{
+        //    if (Input.GetKey(KeyCode.X) && m_owner.CanAttack && m_owner.IsRun == false)
+        //    {
+        //        m_stateManager.EnterState(EActionState.Attack1);
+        //    }
+        //    if (Input.GetKeyDown(KeyCode.C) && m_owner.CanJump == true)
+        //    {
+        //        m_stateManager.EnterState(EActionState.Jump_Prepare);
+        //    }
+        //    if (Input.GetKeyDown(KeyCode.Z) && m_owner.CanSkill)
+        //    {
+        //        m_stateManager.EnterState(EActionState.Skill1);
+        //    }
+        //    //if (Input.GetKeyDown(KeyCode.S) && m_owner.CanSkill)
+        //    //{
+        //    //    m_stateManager.EnterState(EActionState.Skill2);
+        //    //}
+        //    //if (Input.GetKeyDown(KeyCode.D) && m_owner.CanSkill)
+        //    //{
+        //    //    m_stateManager.EnterState(EActionState.Skill3);
+        //    //}
+        //}
     }
 
     public override void OnFixedUpdate()

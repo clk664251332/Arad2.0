@@ -40,6 +40,8 @@ public class AnimationAbility : BaseAbility
 
         var fashionData = ConfigManager.Instance.GetData<FashionLoader, FashionLoader.Data>(m_owner.FashionConfigId);
         InitPart(fashionData);
+
+        EventManager.Instance.AddInputEvent(null, EEventType.InputManager_ChangeCloth, new BoolCallback(ChangeCloth));
     }
 
     public override void GetComponent()
@@ -52,22 +54,6 @@ public class AnimationAbility : BaseAbility
         base.Update();
         SetSpriteFlip();
         UpdatePartSprite();
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            //ChangePart(0, EPartType.Coat_a);
-            //ChangePart(0, EPartType.Coat_b);
-            //ChangePart(0, EPartType.Coat_c);
-            //ChangePart(0, EPartType.Coat_d);
-            if (fashionId == 1001)
-            {
-                ChangeFashion(1002);
-                fashionId = 1002;
-            }else if(fashionId == 1002)
-            {
-                ChangeFashion(1001);
-                fashionId = 1001;
-            }
-        }
     }
 
     private void SetSpriteFlip()
@@ -347,6 +333,31 @@ public class AnimationAbility : BaseAbility
 
             m_lstPartSprite[i].SortingOrder = 600 - (int)m_owner.Transform.position.y + m_lstPartSprite[i].SortingLevel;
         }
+    }
+
+    private bool ChangeCloth()
+    {
+        //ChangePart(0, EPartType.Coat_a);
+        //ChangePart(0, EPartType.Coat_b);
+        //ChangePart(0, EPartType.Coat_c);
+        //ChangePart(0, EPartType.Coat_d);
+        if(m_owner is Hero)
+        {
+            if (fashionId == 1001)
+            {
+                ChangeFashion(1002);
+                fashionId = 1002;
+            }
+            else if (fashionId == 1002)
+            {
+                ChangeFashion(1001);
+                fashionId = 1001;
+            }
+
+            return true;
+        }
+
+        return false;
     }
 
     public override void Release()

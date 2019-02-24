@@ -15,6 +15,7 @@ public class UIManager : SingletonObject<UIManager>
     {
         InitCanvas();
         InitMediator();
+        EventManager.Instance.AddInputEvent(null, EEventType.InputManager_ShowUI, new BoolCallback(ShowUITest));
     }
 
     private void InitCanvas()
@@ -57,11 +58,6 @@ public class UIManager : SingletonObject<UIManager>
         {
             if (m_lstOpenMediator[i].IsOpen)
                 m_lstOpenMediator[i].Update();
-        }
-
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            ToggleOpen<TestUI>();
         }
     }
 
@@ -135,6 +131,13 @@ public class UIManager : SingletonObject<UIManager>
     {
         string strMediatorName = typeof(T).ToString().ToLower();
         return GetMediator(strMediatorName) as T;
+    }
+
+    private bool ShowUITest()
+    {
+        ToggleOpen<TestUI>();
+
+        return true;
     }
 
     public void Release()

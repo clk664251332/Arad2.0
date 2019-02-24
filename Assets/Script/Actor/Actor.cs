@@ -22,6 +22,7 @@ public class Actor : Entity
 
     private bool m_bIsRun = false;
     private bool m_bIsJump = false;
+    private bool m_bIsAttack = false;
 
     public bool CanMove
     {
@@ -98,6 +99,19 @@ public class Actor : Entity
         set
         {
             m_bIsJump = value;
+        }
+    }
+
+    public bool IsAtatck
+    {
+        get
+        {
+            return m_bIsAttack;
+        }
+
+        set
+        {
+            m_bIsAttack = value;
         }
     }
 

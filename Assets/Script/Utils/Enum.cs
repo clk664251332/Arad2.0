@@ -39,7 +39,14 @@ public enum EEventType
 {
     AttrChange = 100,
     InputManager_Event_Start,
-    InputManager_MouseRightClick,
+    InputManager_AttackInIdle,
+    InputManager_AttackInAttack,
+    InputManager_Jump,
+    InputManager_Skill1,
+    InputManager_Skill2,
+    InputManager_Skill3,
+    InputManager_ChangeCloth,
+    InputManager_ShowUI,
     InputManager_Event_End,
 }
 

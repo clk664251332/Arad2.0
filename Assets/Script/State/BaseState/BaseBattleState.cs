@@ -19,12 +19,15 @@ public abstract class BaseBattleState : BaseState
     private bool m_bCanCreateEffect;
     public BaseBattleState(Actor actor, EActionState eState) : base(actor, eState)
     {
-       
+        
     }
 
     public override void EnterState(EActionState eLastState)
     {
         base.EnterState(eLastState);
+
+        EventManager.Instance.AddInputEvent(null, EEventType.InputManager_AttackInAttack, new BoolCallback(CombleAttackCheck));
+
         if (m_animationAbility == null) m_animationAbility = m_owner.GetAbility<AnimationAbility>();
         GetSkillData();
         m_eSkillType = ConfigManager.Instance.GetLoader<SkillLoader>().GetSKillType(m_nSkillId);
@@ -36,6 +39,7 @@ public abstract class BaseBattleState : BaseState
         m_owner.CanJump = false;
         m_owner.CanAttack = false;
         m_owner.CanSkill = false;
+        m_owner.IsAtatck = true;
 
         m_inputAbility.MoveX(0);
 
@@ -47,10 +51,9 @@ public abstract class BaseBattleState : BaseState
         m_lstSkillEffectId = ConfigManager.Instance.GetLoader<SkillLoader>().GetSkillEffectIdList(m_nSkillId);
     }
 
-    public override void OnUpdate()
+    private bool CombleAttackCheck()
     {
-        base.OnUpdate();
-
+        if (m_skillData == null) return false;
         //连招检测
         if (m_skillData.NextActionName != "0")
         {
@@ -58,13 +61,38 @@ public abstract class BaseBattleState : BaseState
             {
                 if (m_owner is Hero)
                 {
-                    if (Input.GetKey(KeyCode.X))
-                        m_stateManager.EnterState(m_skillData.NextActionName);
+                    m_stateManager.EnterState(m_skillData.NextActionName);
+                    return true;
                 }
                 else
+                {
                     m_stateManager.EnterState(m_skillData.NextActionName);
+                    return false;
+                }
             }
         }
+
+        return false;
+    }
+
+    public override void OnUpdate()
+    {
+        base.OnUpdate();
+
+        //连招检测
+        //if (m_skillData.NextActionName != "0")
+        //{
+        //    if (m_tk2DSpriteAnimator.CurrentFrame >= m_skillData.EarlyEndFramIndex)
+        //    {
+        //        if (m_owner is Hero)
+        //        {
+        //            if (Input.GetKey(KeyCode.X))
+        //                m_stateManager.EnterState(m_skillData.NextActionName);
+        //        }
+        //        else
+        //            m_stateManager.EnterState(m_skillData.NextActionName);
+        //    }
+        //}
         //碰撞检测
         if (m_tk2DSpriteAnimator.CurrentFrame == m_skillData.AttackFramIndex && m_bCanHit && m_eSkillType == ESkillType.WeaponType)
         {
@@ -107,6 +135,9 @@ public abstract class BaseBattleState : BaseState
     {
         base.BreakState(eNextState);
         m_bCanHit = false;
+        m_owner.IsAtatck = false;
+
+        EventManager.Instance.RemoveInputEvent(EEventType.InputManager_AttackInAttack, CombleAttackCheck);
     }
 
     public override void Reset()

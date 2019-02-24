@@ -6,6 +6,7 @@ public class PlayerStateManager : BaseStateManager
 {
     public PlayerStateManager(Actor actor) : base(actor)
     {
+        //todo: 这里还可以用状态工厂进行创建，但是每一个类还要对应一种枚举，也很麻烦
         m_lstState.Add(new IdleState(actor));
         m_lstState.Add(new JumpPrepareState(actor));
         m_lstState.Add(new JumpUpState(actor));
